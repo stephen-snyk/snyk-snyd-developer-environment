@@ -31,6 +31,9 @@ resource "google_compute_instance" "origin1" {
   metadata_startup_script = data.template_file.server.rendered
   metadata = {
       snyk-terraform = "sperciballi-box"
+      cf-terraform = "demo-access-"
+      cf-email = var.cloudflare_email
+      cf-zone = var.cloudflare_zone
   }
 }
 
@@ -43,6 +46,13 @@ data "template_file" "server" {
     bitbucket_username = "${var.bitbucket_username}"
     bitbucket_password = "${var.bitbucket_password}"
     pub_ip = "${google_compute_address.default.address}"
+    web_zone = var.cloudflare_zone,
+    account     = var.cloudflare_account_id,
+    cf_user  = var.cloudflare_email,
+    tunnel_id   = cloudflare_tunnel.snyk_dev_desktop.id,
+    tunnel_name = cloudflare_tunnel.snyk_dev_desktop.name,
+    secret      = random_id.argo_secret.b64_std,
+    cf_api   = var.cloudflare_token
   }
 }
 

@@ -1,5 +1,5 @@
 apt update -y && apt upgrade -y
-apt install -y ca-certificates curl software-properties-common
+DEBIAN_FRONTEND=noninteractive apt install -y ca-certificates curl software-properties-common xfce4 xfce4-goodies tightvncserver
 
 # Docker install
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -28,3 +28,34 @@ docker run -d --restart=always \
            -e NODE_TLS_REJECT_UNAUTHORIZED=0 \
        snyk/broker:bitbucket-server
 EOF
+
+# Cloudflared install
+wget -O /root/cloudflared-linux-amd64.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+sudo dpkg -i /root/cloudflared-linux-amd64.deb
+mkdir ~/.cloudflared
+touch ~/.cloudflared/cert.json
+touch ~/.cloudflared/config.yml
+cat > ~/.cloudflared/cert.json << "EOF"
+{
+    "AccountTag"   : "${account}",
+    "TunnelID"     : "${tunnel_id}",
+    "TunnelName"   : "${tunnel_name}",
+    "TunnelSecret" : "${secret}"
+}
+EOF
+cat > ~/.cloudflared/config.yml << "EOF"
+tunnel: ${tunnel_id}
+credentials-file: /etc/cloudflared/cert.json
+logfile: /var/log/cloudflared.log
+loglevel: info
+EOF
+
+cat > ~/.vnc/xstartup << "EOF"
+startxfce4
+EOF
+
+sudo cloudflared service install
+sudo cp -via ~/.cloudflared/cert.json /etc/cloudflared/
+cd /tmp
+sudo service cloudflared start
+sudo vncserver
