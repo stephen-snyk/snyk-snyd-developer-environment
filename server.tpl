@@ -1,5 +1,8 @@
 apt update -y && apt upgrade -y
-DEBIAN_FRONTEND=noninteractive apt install -y ca-certificates curl software-properties-common xfce4 xfce4-goodies tightvncserver
+DEBIAN_FRONTEND=noninteractive apt install -y ca-certificates curl software-properties-common xfce4 xfce4-goodies tightvncserver firefox
+
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+nvm install 16.20.0
 
 # Docker install
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
