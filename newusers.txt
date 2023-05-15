@@ -1,0 +1,8 @@
+awk '{i=1} {while (i <=25) {print  "student"i":!Student"i":10"i":10"i"::/home/student"i":/bin/bash" ;i++}}' main.tf
+
+student1:!Student1:1011:1011::/home/student1:/bin/bash
+student2:!Student2:1012:1012::/home/student2:/bin/bash
+student3:!Student3:1013:1013::/home/student3:/bin/bash
+student4:!Student4:1014:1014::/home/student4:/bin/bash
+student5:!Student5:1015:1015::/home/student5:/bin/bash
+student5:!Student6:1016:1016::/home/student6:/bin/bash
